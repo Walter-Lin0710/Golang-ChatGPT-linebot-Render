@@ -15,12 +15,13 @@ import (
 func getChatGPTresponse(ctx context.Context, question string) string {
 	c := gogpt.NewClient(os.Getenv("OPENAI_TOKEN"))
 
-	maxtokens, err0 := strconv.Atoi(os.Getenv("OPENAI_MAXTOKENS"))
-
-	if err0 != nil {
-		fmt.Println("Error during conversion")
-		return "MaxTokens Conversion Error happened!"
+maxtokens := 800
+if val := os.Getenv("OPENAI_MAXTOKENS"); val != "" {
+	if parsed, err := strconv.Atoi(val); err == nil {
+		maxtokens = parsed
 	}
+}
+
 
 	req := gogpt.CompletionRequest{
 		Model:       "text-davinci-003",
