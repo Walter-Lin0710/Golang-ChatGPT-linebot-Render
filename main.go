@@ -30,7 +30,7 @@ if token == "" {
 		}
 	}
 
-token := os.Getenv("OPENAI_TOKEN")
+token = os.Getenv("OPENAI_TOKEN")
 if token == "" {
 	fmt.Println("❌ 沒有抓到 OPENAI_TOKEN 環境變數！")
 } else {
