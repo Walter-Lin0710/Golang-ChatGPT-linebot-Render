@@ -23,6 +23,13 @@ func getChatGPTresponse(ctx context.Context, question string) string {
 		}
 	}
 
+token := os.Getenv("OPENAI_TOKEN")
+if token == "" {
+	fmt.Println("❌ 沒有抓到 OPENAI_TOKEN 環境變數！")
+} else {
+	fmt.Println("✅ 成功抓到 OPENAI_TOKEN，開頭是：", token[:10])
+}
+	
 	req := gogpt.CompletionRequest{
 		Model:       "text-davinci-003",
 		MaxTokens:   maxtokens,
