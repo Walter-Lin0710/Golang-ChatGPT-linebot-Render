@@ -34,30 +34,7 @@ func getChatGPTresponse(ctx context.Context, question string) string {
 	return resp.Choices[0].Message.Content
 }
 
-maxtokens := 800
-if val := os.Getenv("OPENAI_MAXTOKENS"); val != "" {
-	if parsed, err := strconv.Atoi(val); err == nil {
-		maxtokens = parsed
-	}
-}
 
-
-	req := gogpt.CompletionRequest{
-		Model:       "text-davinci-003",
-		MaxTokens:   maxtokens,
-		Prompt:      question,
-		Temperature: 0,
-	}
-	resp, err := c.CreateCompletion(ctx, req)
-	if err != nil {
-		return "You got an error!"
-	} else {
-		fmt.Println(resp.Choices[0].Text)
-
-		return resp.Choices[0].Text
-	}
-
-}
 
 func main() {
 	ctx := context.Background()
