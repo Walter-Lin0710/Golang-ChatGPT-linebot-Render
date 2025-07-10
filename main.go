@@ -37,12 +37,15 @@ if token == "" {
 	fmt.Println("✅ 成功抓到 OPENAI_TOKEN，開頭是：", token[:10])
 }
 	
-	req := gogpt.CompletionRequest{
-		Model:       "text-davinci-003",
-		MaxTokens:   maxtokens,
-		Prompt:      question,
-		Temperature: 0.7,
-	}
+	req := gogpt.ChatCompletionRequest{
+	Model: gogpt.GPT3Dot5Turbo,
+	Messages: []gogpt.ChatCompletionMessage{
+		{
+			Role:    "user",
+			Content: question,
+		},
+	},
+}
 
 	resp, err := c.CreateCompletion(ctx, req)
 	if err != nil {
