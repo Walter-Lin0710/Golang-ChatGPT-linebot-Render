@@ -15,23 +15,28 @@ import (
 func getChatGPTresponse(ctx context.Context, question string) string {
 	c := gogpt.NewClient(os.Getenv("OPENAI_TOKEN"))
 
-	req := gogpt.ChatCompletionRequest{
-		Model: gogpt.GPT3Dot5Turbo,
-		Messages: []gogpt.ChatCompletionMessage{
-			{
-				Role:    "user",
-				Content: question,
-			},
-		},
+	// 預設使用 800 個 token（你也可以改掉）
+	maxtokens := 800
+	if val := os.Getenv("OPENAI_MAXTOKENS"); val != "" {
+		if parsed, err := strconv.Atoi(val); err == nil {
+			maxtokens = parsed
+		}
 	}
 
-	resp, err := c.CreateChatCompletion(ctx, req)
+	req := gogpt.CompletionRequest{
+		Model:       "text-davinci-003",
+		MaxTokens:   maxtokens,
+		Prompt:      question,
+		Temperature: 0.7,
+	}
+
+	resp, err := c.CreateCompletion(ctx, req)
 	if err != nil {
-		fmt.Println("ChatGPT error:", err)
-		return "抱歉，AI 回答時發生錯誤 😢"
+		fmt.Println("OpenAI error:", err)
+		return "抱歉，AI 回答時出錯了 😢"
 	}
 
-	return resp.Choices[0].Message.Content
+	return resp.Choices[0].Text
 }
 
 
